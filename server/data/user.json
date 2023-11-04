@@ -1,14 +1,33 @@
 [
-    {
-        "name":"Suresh",
-        "id":"1",
-        "password":null,
-        "token":null
-    },
-    {
-        "name":"SK",
-        "id":"1",
-        "password":null,
-        "token":null
-    }
+  {
+    "id": "c4e76b72-bbda-4de4-826e-a8d92fd5cad1",
+    "name": "s",
+    "password": "$2a$10$gZuakUCur3gl2V0Hfm0T0ue2d.Yby0PdNP0UW.GXADnofDMrLqkYu",
+    "email": "s1@gmail.com"
+  },
+  {
+    "id": "39612d68-5865-4af8-b2e5-0340f50d09d7",
+    "name": "s",
+    "password": "$2a$10$9ROwY6b9NObvM1bFL7WMLemo9b5K.W.a1vWrrjofm3hdqqyCiOSPm",
+    "email": "s1@gmail.com"
+  },
+  {
+    "id": "44a1ce89-7bdc-4503-84a2-ac445f82fd5a",
+    "name": "s",
+    "password": "$2a$10$4HqH50ZNOc1dSUi0JwVy7O4ly3Dpow1/zSqMJqcbJgJJs4ko.gZDO",
+    "email": "s2@gmail.com"
+  },
+  {
+    "id": "6e79ea1f-bab7-49fc-a75a-b3993024ff14",
+    "name": "s",
+    "password": "$2a$10$gmGSC6weiYBsD4XlrgdZm.xr41hA9CFAuwk/nvS9x60iwuZx.e2be",
+    "email": "s2@gmail.com"
+  },
+  {
+    "id": "588623bf-57a4-4f25-b0da-4a5f7a246520",
+    "name": "s",
+    "password": "$2a$10$OuCB4ZsLOPZgwew6b2jX3OeIMhBledZwZ33zTcwNucM5evYyrcM3y",
+    "email": "s@gmail.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4ODYyM2JmLTU3YTQtNGYyNS1iMGRhLTRhNWY3YTI0NjUyMCIsIm5hbWUiOiJzIiwiZW1haWwiOiJzQGdtYWlsLmNvbSIsImlhdCI6MTY5OTExMjI3MSwiZXhwIjoxNjk5MTEyODcxfQ.nRZ5Z8bafEv6Fo1khROCSkRqGI6pkzs7G8KU7tmsI3o"
+  }
 ]
