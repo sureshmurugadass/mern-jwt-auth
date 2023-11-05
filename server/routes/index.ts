@@ -1,7 +1,7 @@
 import { Express } from "express";
 import authRoutes from "./auth";
 import userRoutes from "./user";
-import { validateUser } from "../controller/AuthController";
+import { validateUser } from "../middleware/auth";
 
 export default function configureRoutes(app: Express) {
   app.use("/auth", authRoutes);

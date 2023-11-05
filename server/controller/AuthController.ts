@@ -1,11 +1,20 @@
 import User from "../data/User";
-import { addUser, getUserByEmail, updateUser } from "../data/UserHelper";
-import { Request, Response } from "express";
+import {
+  addUser,
+  getUserByEmail,
+  getUserById,
+  updateUser,
+} from "../data/UserHelper";
+import { CustomRequest, CustomResponse } from "../types";
 import { v4 as uuid } from "uuid";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export async function register(req: Request, res: Response) {
+const ACCESS_TOKEN_EXPIRY =
+  (process.env.ACCESS_TOKEN_EXPIRY_IN_SECONDS as unknown as number) || 30;
+const REFRESH_TOKEN_EXPIRY =
+  (process.env.REFRESH_TOKEN_EXPIRY_IN_SECONDS as unknown as number) || 600;
+export async function register(req: CustomRequest, res: CustomResponse) {
   const name = req.body.name as string;
   const password = req.body.password as string;
   const email = req.body.email as string;
@@ -25,7 +34,7 @@ export async function register(req: Request, res: Response) {
   addUser(user);
   res.status(200).json(user);
 }
-export async function login(req: Request, res: Response) {
+export async function login(req: CustomRequest, res: CustomResponse) {
   const email = req.body.email as string;
   const password = req.body.password as string;
   if (!Boolean(password) || !Boolean(email)) {
@@ -42,12 +51,12 @@ export async function login(req: Request, res: Response) {
   const accesstoken = jwt.sign(
     data,
     process.env.ACCESS_TOKEN_SECRET as string,
-    { expiresIn: "30s" }
+    { expiresIn: ACCESS_TOKEN_EXPIRY }
   );
   const refreshtoken = jwt.sign(
     data,
-    process.env.ACCESS_TOKEN_SECRET as string,
-    { expiresIn: "10m" }
+    process.env.REFRESH_TOKEN_SECRET as string,
+    { expiresIn: REFRESH_TOKEN_EXPIRY }
   );
   // update token
   user.token = refreshtoken;
@@ -56,19 +65,43 @@ export async function login(req: Request, res: Response) {
     .status(200)
     .cookie("refreshtoken", refreshtoken, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: REFRESH_TOKEN_EXPIRY * 1000,
     })
-    .json({ data: data, accesstoken: accesstoken });
+    .json({
+      data: data,
+      accesstoken: accesstoken,
+      expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRY * 1000),
+    });
 }
-export function logout() {}
-export function generateNewToken() {}
-export function validateUser(req: Request, res: Response, next: any) {
-  const AUTH_HEADER = req.headers.authorization;
-  const TOKEN = AUTH_HEADER?.split(" ")[1];
-  if (!TOKEN) return res.sendStatus(401);
+export function logout(req: CustomRequest, res: CustomResponse) {
+  if (!req.userInfo?.id) return res.sendStatus(404);
+  const user = getUserById(req.userInfo.id) as User;
+  user.token = undefined;
+  updateUser(user);
+  res.clearCookie("refreshtoken").sendStatus(200);
+}
+export function generateNewToken(req: CustomRequest, res: CustomResponse) {
+  const REFRESH_TOKEN = req.cookies.refreshtoken as string;
+  if (!REFRESH_TOKEN) return res.sendStatus(401);
   try {
-    jwt.verify(TOKEN, process.env.ACCESS_TOKEN_SECRET as string);
-    next();
+    const user = jwt.verify(
+      REFRESH_TOKEN,
+      process.env.REFRESH_TOKEN_SECRET as string
+    ) as User;
+    const data = { id: user.id, name: user.name, email: user.email };
+
+    const accesstoken = jwt.sign(
+      data,
+      process.env.ACCESS_TOKEN_SECRET as string,
+      { expiresIn: ACCESS_TOKEN_EXPIRY }
+    );
+    res
+      .status(200)
+      .json({
+        data: data,
+        accesstoken: accesstoken,
+        expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRY * 1000),
+      });
   } catch (_e) {
     res.sendStatus(401);
   }

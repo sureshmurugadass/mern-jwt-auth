@@ -1,6 +1,5 @@
 import { getAllUsers, getUserById } from "../data/UserHelper";
 import { Request, Response } from "express";
-
 export function getUsers(_req: Request, res: Response) {
   const users = getAllUsers();
   return res.status(200).json(users);

@@ -1,0 +1,17 @@
+POST http://localhost:4000/auth/login
+Content-Type: application/json
+
+{
+    "email": "s@gmail.com",
+    "password": "123456"
+}
+###
+GET http://localhost:4000/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4ODYyM2JmLTU3YTQtNGYyNS1iMGRhLTRhNWY3YTI0NjUyMCIsIm5hbWUiOiJzIiwiZW1haWwiOiJzQGdtYWlsLmNvbSIsImlhdCI6MTY5OTIwNjA1MCwiZXhwIjoxNjk5MjA2MDgwfQ.TxKXRqafh8XBQHit20jgzDU1gfSWNHDxytiC_v7jPII
+
+###
+GET http://localhost:4000/user/get-users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4ODYyM2JmLTU3YTQtNGYyNS1iMGRhLTRhNWY3YTI0NjUyMCIsIm5hbWUiOiJzIiwiZW1haWwiOiJzQGdtYWlsLmNvbSIsImlhdCI6MTY5OTIwNjE1MSwiZXhwIjoxNjk5MjA2MTgxfQ.3H7DZDK1sfdZwzFslPn_-EUC7-GmQq6VpMHy-QozZG4
+
+###
+GET http://localhost:4000/auth/generate-new-token
